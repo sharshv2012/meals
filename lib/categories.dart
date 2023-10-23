@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meals/category_grid_item.dart';
+import 'package:meals/widget/category_grid_item.dart';
 import 'package:meals/data/dummy_data..dart';
 import 'package:meals/meals.dart';
 import 'package:meals/models/category.dart';
@@ -9,12 +9,18 @@ class CategoriesScreen extends StatelessWidget {
 
   void _selectCategory(BuildContext context, Category category) {
 
-  final filteredMeals = dummyMeals.where((meal) => meal.categories.contains(category.id)).toList();
+  final filteredMeals = dummyMeals.where(
+    (meal) => 
+      meal.categories.contains(category.id),
+    ).toList();
 
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>  MealsScreen(meals: filteredMeals, title: category.title),
+        builder: (context) =>  MealsScreen(
+          meals: filteredMeals, 
+          title: category.title,
+        ),
       ),
     ); // u can also do Navigator.of(context).push(rout);
   }
@@ -34,7 +40,10 @@ class CategoriesScreen extends StatelessWidget {
             mainAxisSpacing: 20),
         children: [
           for (final category in availableCategories)
-            CategoryGridItem(category: category, onSelectCategory: (){_selectCategory(context, category);})
+            CategoryGridItem(
+              category: category, 
+              onSelectCategory: (){_selectCategory(context, category);},
+            )
           // u can also map the widgets like :
           //...availableCategories.map((category) => CategoryGridItem(category:category)).toList()
         ],
