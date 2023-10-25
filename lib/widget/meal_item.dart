@@ -7,9 +7,11 @@ class MealItem extends StatelessWidget {
   const MealItem({
     super.key,
     required this.meal,
+    required this.onSelectMeal,
   });
 
   final Meal meal;
+  final void Function(Meal meal ) onSelectMeal;
 
   String get complexityText{
     return meal.complexity.name[0].toUpperCase() + meal.complexity.name.substring(1); //harsh -> Harsh
@@ -26,7 +28,9 @@ class MealItem extends StatelessWidget {
       clipBehavior: Clip.hardEdge, // clips any outgoing content of child widget(as we used circular radius which stack overrides.)
       elevation: 2,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          onSelectMeal(meal);
+        },
         //splashColor: Colors.white,(not working over image)
         child: Stack(
           children: [
