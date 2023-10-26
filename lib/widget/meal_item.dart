@@ -29,7 +29,8 @@ class MealItem extends StatelessWidget {
       elevation: 2,
       child: InkWell(
         onTap: () {
-          onSelectMeal(meal);
+          onSelectMeal(meal); //Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => MealDetailsScreen(meal: meal),
+                              // I can do this too.
         },
         //splashColor: Colors.white,(not working over image)
         child: Stack(
@@ -68,7 +69,7 @@ class MealItem extends StatelessWidget {
                       children: [
                         MealItemTrait(icon: Icons.schedule, label: '${meal.duration} min'),
                         const SizedBox(width: 12,),
-                        MealItemTrait(icon: Icons.work, label: complexityText),
+                        MealItemTrait(icon: Icons.menu_book, label: complexityText),
                         const SizedBox(width: 12,),
                         MealItemTrait(icon: Icons.attach_money, label: affordabilityText),
 
