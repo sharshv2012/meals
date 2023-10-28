@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:meals/data/dummy_data..dart';
 import 'package:meals/models/meal.dart';
 import 'package:meals/screens/categories.dart';
 import 'package:meals/screens/meals.dart';
+import 'package:meals/widget/main_drawer.dart';
 
 class TabsScreen extends StatefulWidget{
 
@@ -44,6 +46,19 @@ class _tabsScreenState extends State<TabsScreen>{
       _selectedPageIndex = index;
     });
   }
+
+  void _setScreen(String identifier){
+    if(identifier == 'meals'){
+      Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => MealsScreen(meals: dummyMeals, title:  "All Meals", onToggleFavourite: _toggleMealFavouriteStatus),
+      ),
+    );
+    }else {
+      Navigator.of(context).pop();
+    }
+
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -58,6 +73,7 @@ class _tabsScreenState extends State<TabsScreen>{
       appBar: AppBar(
         title: Text(activePageTitle),
       ),
+      drawer: MainDrawer(onSelectScreen: _setScreen,),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
