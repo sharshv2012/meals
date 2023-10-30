@@ -50,8 +50,9 @@ class _tabsScreenState extends State<TabsScreen> {
   }
 
   void _setScreen(String identifier) {
+    Navigator.of(context).pop();// to close the drawer.
     if (identifier == 'meals') {
-      Navigator.of(context).push(
+      Navigator.of(context).push(// if you use pushReplacement , the stack will be cleared and the the screen will be pushed, then back button won't take you to previous screen.
         MaterialPageRoute(
           builder: (ctx) => MealsScreen(
             meals: dummyMeals,
@@ -61,6 +62,7 @@ class _tabsScreenState extends State<TabsScreen> {
         ),
       );
     } else if (identifier == "filter") {
+      
       Navigator.of(context).push(
         MaterialPageRoute(builder: (ctx) => const FilterScreen()),
       );
