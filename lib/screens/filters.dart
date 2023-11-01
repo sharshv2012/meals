@@ -35,7 +35,7 @@ class _FilterScreen extends State<FilterScreen> {
             Filter.glutenFree: _glutenFreeFilterSet,
             Filter.lactoseFree: _lactoseFreeFilterSet,
             Filter.vegetarian: _vegetarianFilterSet,
-            Filter.vegan: _veganFilterSet
+            Filter.vegan: _veganFilterSet // we'll get a future which contains this map.
           });// by using async the passed fun will return a future (here in boolean form)
           return false; // you'll pop twice if 'true' as you are already poping manually.
         },

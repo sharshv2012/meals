@@ -49,7 +49,7 @@ class _tabsScreenState extends State<TabsScreen> {
     });
   }
 
-  void _setScreen(String identifier) {
+  void _setScreen(String identifier) async{
     Navigator.of(context).pop();// to close the drawer.
     if (identifier == 'meals') {
       Navigator.of(context).push(// if you use pushReplacement ,
@@ -65,9 +65,11 @@ class _tabsScreenState extends State<TabsScreen> {
       );
     } else if (identifier == "filter") {
       
-      Navigator.of(context).push(
+      final result = await Navigator.of(context).push<Map<Filter, bool>>(  // once the result screen is pushed it'll surely returnt that map value in future.
         MaterialPageRoute(builder: (ctx) => const FilterScreen()),
       );
+
+      print(result);
     }
   }
 
