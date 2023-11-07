@@ -6,6 +6,15 @@ import 'package:meals/screens/filters.dart';
 import 'package:meals/screens/meals.dart';
 import 'package:meals/widget/main_drawer.dart';
 
+const kInitialFilter = 
+  {
+    Filter.glutenFree: false,
+    Filter.lactoseFree: false,
+    Filter.vegan: false,
+    Filter.vegetarian: false
+  };
+
+
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
   @override
@@ -15,8 +24,15 @@ class TabsScreen extends StatefulWidget {
 }
 
 class _tabsScreenState extends State<TabsScreen> {
-  int _selectedPageIndex = 0;
+  var _selectedPageIndex = 0;
+  
   final List<Meal> _favoriteMeals = [];
+  Map<Filter, bool> _selectedFilters = {
+    Filter.glutenFree: false,
+    Filter.lactoseFree: false,
+    Filter.vegan: false,
+    Filter.vegetarian: false
+  };
 
   void _showInfoMessage(String message) {
     ScaffoldMessenger.of(context).clearSnackBars();
@@ -44,8 +60,10 @@ class _tabsScreenState extends State<TabsScreen> {
   }
 
   void _selectPage(int index) {
+
     setState(() {
       _selectedPageIndex = index;
+      
     });
   }
 
@@ -63,22 +81,49 @@ class _tabsScreenState extends State<TabsScreen> {
           ),
         ),
       );
-    } else if (identifier == "filter") {
+    } 
+    
+    else if (identifier == "filter") {
       
-      final result = await Navigator.of(context).push<Map<Filter, bool>>(  // once the result screen is pushed it'll surely returnt that map value in future.
+      final result = await Navigator.of(context).push<Map<Filter, bool>>(  
         MaterialPageRoute(builder: (ctx) => const FilterScreen()),
-      );
+      );// once the result screen is pushed it'll surely return that map value in future.
 
-      print(result);
+      setState(() {
+        _selectedFilters = result ?? kInitialFilter; // in case result is null.
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+
+    final avaibleMeals = dummyMeals.where((Meal) { // filtering the dummyMeals list according to the filters we have.
+
+      if (_selectedFilters[Filter.glutenFree]! && !Meal.isGlutenFree){
+        return false;
+      }
+      if (_selectedFilters[Filter.lactoseFree]! && !Meal.isLactoseFree){
+        return false;
+      }
+      if (_selectedFilters[Filter.vegan]! && !Meal.isVegan){
+        return false;
+      }
+      if (_selectedFilters[Filter.vegetarian]! && !Meal.isVegetarian){
+        return false;
+      }
+
+      return true;
+
+    }).toList();
+
+
     Widget activePage = CategoriesScreen(
       onToggleFavourite: _toggleMealFavouriteStatus,
+      availbleMeals: avaibleMeals,
     );
     var activePageTitle = 'Categories';
+    //print("heyy ${_selectedPageIndex}");
     if (_selectedPageIndex == 1) {
       activePage = MealsScreen(
         meals: _favoriteMeals,
@@ -92,12 +137,15 @@ class _tabsScreenState extends State<TabsScreen> {
         title: Text(activePageTitle),
       ),
       drawer: MainDrawer(
-        onSelectScreen: _setScreen,
+       onSelectScreen: _setScreen,
       ),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
+        key: Key('bottom_navigation_bar'),
         onTap: (index) {
-          _selectPage;
+          setState(() {
+            _selectedPageIndex = index;
+          });
         }, // flutter gives an index value according to the pressed tab.
         currentIndex:
             _selectedPageIndex, // it'll control highlighting of current tab.
