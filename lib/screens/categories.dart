@@ -6,9 +6,9 @@ import 'package:meals/screens/meals.dart';
 import 'package:meals/models/category.dart';
 
 class CategoriesScreen extends StatelessWidget {
-  const CategoriesScreen({super.key, required this.onToggleFavourite, required this.availbleMeals});
+  const CategoriesScreen({super.key, required this.availbleMeals});
 
-  final void Function(Meal meal) onToggleFavourite;
+  
   final List<Meal> availbleMeals;
 
   void _selectCategory(BuildContext context, Category category) {
@@ -24,7 +24,7 @@ class CategoriesScreen extends StatelessWidget {
         builder: (context) =>  MealsScreen(
           meals: filteredMeals, 
           title: category.title,
-          onToggleFavourite: onToggleFavourite,
+          
         ),
       ),
     ); // u can also do Navigator.of(context).push(rout);

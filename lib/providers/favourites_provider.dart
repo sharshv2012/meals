@@ -5,7 +5,7 @@ class FavMealsNotifier extends StateNotifier<List<Meal>> {
   FavMealsNotifier() : super([]); 
   // inside super we have to pass our initial data.
 
-  void _toggleMealFavouriteStatus(Meal meal){ // methods to edit our data.
+  bool toggleMealFavouriteStatus(Meal meal){ // methods to edit our data.
     // but the thing is we can't edit or mutate our data just like we normally did.
     // We have to pass the data derived from our data.
     // we can use add or remove here.
@@ -15,8 +15,10 @@ class FavMealsNotifier extends StateNotifier<List<Meal>> {
 
     if(mealIsFav){
       state = state.where((m) => m.id != meal.id).toList();
+      return false;
     }else{
       state = [...state, meal]; 
+      return true;
       // ... spreads items of the list or state and adds them to the new list.
     }
     // only reassignment can be done to the state.

@@ -7,6 +7,7 @@ import 'package:meals/screens/filters.dart';
 import 'package:meals/screens/meals.dart';
 import 'package:meals/widget/main_drawer.dart';
 import 'package:meals/providers/meals_provider.dart';
+import 'package:meals/providers/favourites_provider.dart';
 
 
 const kInitialFilter = 
@@ -29,7 +30,7 @@ class TabsScreen extends ConsumerStatefulWidget {
 class _tabsScreenState extends ConsumerState<TabsScreen> {
   var _selectedPageIndex = 0;
   
-  final List<Meal> _favoriteMeals = [];
+ 
   Map<Filter, bool> _selectedFilters = {
     Filter.glutenFree: false,
     Filter.lactoseFree: false,
@@ -37,30 +38,23 @@ class _tabsScreenState extends ConsumerState<TabsScreen> {
     Filter.vegetarian: false
   };
 
-  void _showInfoMessage(String message) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
-  }
+  
 
-  void _toggleMealFavouriteStatus(Meal meal) {
-    final isExisting = _favoriteMeals.contains(meal);
+  // void _toggleMealFavouriteStatus(Meal meal) {
+  //   final isExisting = _favoriteMeals.contains(meal);
 
-    if (isExisting == true) {
-      setState(() {
-        _favoriteMeals.remove(meal);
-      });
-      _showInfoMessage("Meal is no longer a favorite.");
-    } else {
-      setState(() {
-        _favoriteMeals.add(meal);
-      });
-      _showInfoMessage("It's your favorite meal now!");
-    }
-  }
+  //   if (isExisting == true) {
+  //     setState(() {
+  //       _favoriteMeals.remove(meal);
+  //     });
+  //     _showInfoMessage("Meal is no longer a favorite.");
+  //   } else {
+  //     setState(() {
+  //       _favoriteMeals.add(meal);
+  //     });
+  //     _showInfoMessage("It's your favorite meal now!");
+  //   }
+  // }
 
   void _selectPage(int index) {
 
@@ -77,10 +71,10 @@ class _tabsScreenState extends ConsumerState<TabsScreen> {
       // the stack will be cleared and the the screen will be 
       //pushed, then back button won't take you to previous screen.
         MaterialPageRoute(
-          builder: (ctx) => MealsScreen(
+          builder: (ctx) => const  MealsScreen(
             meals: dummyMeals,
-            title: "All Meals",
-            onToggleFavourite: _toggleMealFavouriteStatus,
+            title: "All Meals"
+            
           ),
         ),
       );
@@ -122,16 +116,16 @@ class _tabsScreenState extends ConsumerState<TabsScreen> {
 
 
     Widget activePage = CategoriesScreen(
-      onToggleFavourite: _toggleMealFavouriteStatus,
       availbleMeals: avaibleMeals,
     );
     var activePageTitle = 'Categories';
     //print("heyy ${_selectedPageIndex}");
     if (_selectedPageIndex == 1) {
+      final favMeal = ref.watch(favouriteMealsProvider);
       activePage = MealsScreen(
-        meals: _favoriteMeals,
+        meals: favMeal,
         title: '',
-        onToggleFavourite: _toggleMealFavouriteStatus,
+        
       );
       activePageTitle = 'Your Favourites';
     }
