@@ -8,10 +8,13 @@ enum Filter{
   vegan,
 }
 
-class FilterScreen extends StatefulWidget {
+class FilterScreen extends StatefulWidget {  // this is widget class.
   const FilterScreen({super.key, required this.currentFilters});
 
-  final Map<Filter, bool> currentFilters; // once filters are set, to keep them as they are when we come back to this screen we are taking filters from previous screen(which are the ones we passed) and setting them as they were.
+  final Map<Filter, bool> currentFilters; // once filters are set, 
+  //to keep them as they are when we come back to this screen we 
+  //are taking filters from previous screen(which are the ones we passed)
+  // and setting them as they were.
 
   @override
   State<StatefulWidget> createState() {
@@ -19,7 +22,7 @@ class FilterScreen extends StatefulWidget {
   }
 }
 
-class _FilterScreen extends State<FilterScreen> {
+class _FilterScreen extends State<FilterScreen> { // this is state class.
   var _glutenFreeFilterSet = false; // initial setting
   var _lactoseFreeFilterSet = false;
   var _vegetarianFilterSet = false;
@@ -28,8 +31,12 @@ class _FilterScreen extends State<FilterScreen> {
   @override
   void initState() { // it will run as soon as state class runs.
     super.initState();
-    _glutenFreeFilterSet = widget.currentFilters[Filter.glutenFree]!; // accessing widget class objects in state class can be done using 'widget'.
-    _lactoseFreeFilterSet = widget.currentFilters[Filter.lactoseFree]!;// you can only access the objects via 'widget' inside class methods.(set state is also a method)
+    _glutenFreeFilterSet = widget.currentFilters[Filter.glutenFree]!; 
+    // accessing widget class objects in state class 
+    //can be done using 'widget'.
+    _lactoseFreeFilterSet = widget.currentFilters[Filter.lactoseFree]!;
+    // you can only access the objects via 'widget' inside class methods.
+    //(set state is also a method)
     _veganFilterSet = widget.currentFilters[Filter.vegan]!;
     _vegetarianFilterSet = widget.currentFilters[Filter.vegetarian]!;
   }
