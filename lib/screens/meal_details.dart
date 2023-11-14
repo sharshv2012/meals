@@ -9,6 +9,8 @@ class MealDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final favMeals = ref.watch(favouriteMealsProvider);
+    final isItFav = favMeals.contains(meal);
     return Scaffold(
       appBar: AppBar(
         title: Text(meal.title),
@@ -26,8 +28,9 @@ class MealDetailsScreen extends ConsumerWidget {
                     : "Meal Removed From Favs"),
               ));
             },
-            icon: const Icon(
+            icon: Icon(
               Icons.favorite,
+              color: isItFav ? Colors.pink : Colors.white,
             ),
           ),
         ],
