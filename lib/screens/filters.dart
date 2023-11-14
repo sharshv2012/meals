@@ -6,9 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
 class FilterScreen extends ConsumerStatefulWidget {  // this is widget class.
-  const FilterScreen({super.key, required this.currentFilters});
+  const FilterScreen({super.key});
 
-  final Map<Filter, bool> currentFilters; // once filters are set, 
+  //final Map<Filter, bool> currentFilters; // once filters are set, 
   //to keep them as they are when we come back to this screen we 
   //are taking filters from previous screen(which are the ones we passed)
   // and setting them as they were.
@@ -27,15 +27,17 @@ class _FilterScreen extends ConsumerState<FilterScreen> { // this is state class
 
   @override
   void initState() { // it will run as soon as state class runs.
+  // we did this so if the screen is opened again it'll show the previously made changes.
     super.initState();
-    _glutenFreeFilterSet = widget.currentFilters[Filter.glutenFree]!; 
+    final activeFilters = ref.read(filtersProvider);
+    _glutenFreeFilterSet = activeFilters[Filter.glutenFree]!; 
     // accessing widget class objects in state class 
     //can be done using 'widget'.
-    _lactoseFreeFilterSet = widget.currentFilters[Filter.lactoseFree]!;
+    _lactoseFreeFilterSet = activeFilters[Filter.lactoseFree]!;
     // you can only access the objects via 'widget' inside class methods.
     //(set state is also a method)
-    _veganFilterSet = widget.currentFilters[Filter.vegan]!;
-    _vegetarianFilterSet = widget.currentFilters[Filter.vegetarian]!;
+    _veganFilterSet = activeFilters[Filter.vegan]!;
+    _vegetarianFilterSet = activeFilters[Filter.vegetarian]!;
   }
 
   @override
@@ -47,13 +49,21 @@ class _FilterScreen extends ConsumerState<FilterScreen> { // this is state class
       
       body: WillPopScope( 
         onWillPop: () async { // onWillPop needs a function which returns future.
-          Navigator.of(context).pop({
+          ref.read(filtersProvider.notifier).setFilters(
+            {
             Filter.glutenFree: _glutenFreeFilterSet,
             Filter.lactoseFree: _lactoseFreeFilterSet,
             Filter.vegetarian: _vegetarianFilterSet,
             Filter.vegan: _veganFilterSet // we'll get a future which contains this map.
-          });// by using async the passed fun will return a future (here in boolean form)
-          return false; // you'll pop twice if 'true' as you are already poping manually.
+          });
+          return true;
+          // Navigator.of(context).pop({
+          //   Filter.glutenFree: _glutenFreeFilterSet,
+          //   Filter.lactoseFree: _lactoseFreeFilterSet,
+          //   Filter.vegetarian: _vegetarianFilterSet,
+          //   Filter.vegan: _veganFilterSet // we'll get a future which contains this map.
+          // });// by using async the passed fun will return a future (here in boolean form)
+          // return false; // you'll pop twice if 'true' as you are already poping manually.
         },
         child: Column(
           children: [
