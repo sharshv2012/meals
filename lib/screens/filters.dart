@@ -43,7 +43,7 @@ class FilterScreen extends ConsumerWidget {  // this is widget class.
               activeColor: Theme.of(context).colorScheme.tertiary,
               contentPadding: const EdgeInsets.only(left: 34, right: 22),
             ),
-            SwitchListTile(
+            SwitchListTile( 
               value: activeFilter[Filter.lactoseFree]!,
               onChanged: (isChecked) {
                 ref.read(filtersProvider.notifier).setFilter(Filter.lactoseFree, isChecked);
