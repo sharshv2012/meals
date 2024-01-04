@@ -17,7 +17,7 @@ class CategoriesScreen extends StatefulWidget {
 class _CategoriesScreenState extends State<CategoriesScreen>
     with SingleTickerProviderStateMixin {
   // used 'with' to merge another class.
-  // if u have multiple animation controller the use 
+  // if u have multiple animation controller the use
   //TickerProviderStateMixin class.
   late AnimationController _animationController;
 
@@ -32,7 +32,7 @@ class _CategoriesScreenState extends State<CategoriesScreen>
       upperBound: 1,
     );
 
-    _animationController.forward(); 
+    _animationController.forward();
     // run it once , u can use .repeat to repeat the animation.
   }
 
@@ -66,7 +66,7 @@ class _CategoriesScreenState extends State<CategoriesScreen>
     return AnimatedBuilder(
       animation: _animationController,
 
-      //the builder will be rebuild every sec hence to avoid rebuilding of every 
+      //the builder will be rebuild every sec hence to avoid rebuilding of every
       //widget, we take them in the child so they won't be build this many times.
       //the gridview is animating but it is not changing only padding is changing.
       child: GridView(
@@ -88,10 +88,25 @@ class _CategoriesScreenState extends State<CategoriesScreen>
           //...availableCategories.map((category) => CategoryGridItem(category:category)).toList()
         ],
       ),
-      builder: (context, child) => Padding(padding: EdgeInsets.only(
+      builder: (context, child) => SlideTransition(
+        //optimized version
+        position: Tween(
+          begin: const Offset(0, 0.3), // 30% offset on y axis.
+          end: const Offset(0, 0),
+        ).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeInOut, // nature of animation
+            // ease in out means it will be slow at ending and start.
+          ),
+        ),
+        child: child,
+      ),
+
+      /*Padding(padding: EdgeInsets.only(
         top: 100 - _animationController.value * 100, 
         // @value = 0 padding will be 100 and at value @ 1 padding will be 0.
-      ),child: child),
+      ),child: child),*/
     );
   }
 }
