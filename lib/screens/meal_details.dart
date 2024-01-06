@@ -28,9 +28,18 @@ class MealDetailsScreen extends ConsumerWidget {
                     : "Meal Removed From Favs"),
               ));
             },
-            icon: Icon(
-              Icons.favorite,
-              color: isItFav ? Colors.pink : Colors.white,
+            icon: AnimatedSwitcher( // implicit animation.
+              duration: const Duration(milliseconds: 500),
+              transitionBuilder: (child, animation) => RotationTransition(
+                turns: Tween<double>(begin: 0.5, end: 1).animate(animation),  // Tween is used to define the range of values.
+                child: child,
+              ),
+              child: Icon(
+                Icons.favorite,
+                color: isItFav ? Colors.pink : Colors.white,
+                key: ValueKey(isItFav), // to trigger the animation if something changes
+                // key is used when we have multiple widgets of same type to detect the change.
+              ),
             ),
           ),
         ],

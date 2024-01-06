@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meals/data/dummy_data..dart';
@@ -10,9 +12,6 @@ import 'package:meals/widget/main_drawer.dart';
 import 'package:meals/providers/meals_provider.dart';
 import 'package:meals/providers/favourites_provider.dart';
 
-
-
-
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
   @override
@@ -23,10 +22,6 @@ class TabsScreen extends ConsumerStatefulWidget {
 
 class _tabsScreenState extends ConsumerState<TabsScreen> {
   var _selectedPageIndex = 0;
-  
- 
-
-  
 
   // void _toggleMealFavouriteStatus(Meal meal) {
   //   final isExisting = _favoriteMeals.contains(meal);
@@ -45,36 +40,29 @@ class _tabsScreenState extends ConsumerState<TabsScreen> {
   // }
 
   void _selectPage(int index) {
-
     setState(() {
       _selectedPageIndex = index;
-      
     });
   }
 
-  void _setScreen(String identifier) async{
-    Navigator.of(context).pop();// to close the drawer.
+  void _setScreen(String identifier) async {
+    Navigator.of(context).pop(); // to close the drawer.
     if (identifier == 'meals') {
-      Navigator.of(context).push(// if you use pushReplacement ,
-      // the stack will be cleared and the the screen will be 
-      //pushed, then back button won't take you to previous screen.
+      Navigator.of(context).push(
+        // if you use pushReplacement ,
+        // the stack will be cleared and the the screen will be
+        //pushed, then back button won't take you to previous screen.
         MaterialPageRoute(
-          builder: (ctx) => const  MealsScreen(
-            meals: dummyMeals,
-            title: "All Meals"
-            
-          ),
+          builder: (ctx) =>
+              const MealsScreen(meals: dummyMeals, title: "All Meals"),
         ),
       );
-    } 
-    
-    else if (identifier == "filter") {
-      
-      await Navigator.of(context).push<Map<Filter, bool>>(  
-        MaterialPageRoute(builder: (ctx) => const FilterScreen()),// passing the _selectFilter to filter screen so it can align the switches as they were.
-      );// once the result screen is pushed it'll surely return that map value in future.
-
-     
+    } else if (identifier == "filter") {
+      await Navigator.of(context).push<Map<Filter, bool>>(
+        MaterialPageRoute(
+            builder: (ctx) =>
+                const FilterScreen()), // passing the _selectFilter to filter screen so it can align the switches as they were.
+      ); // once the result screen is pushed it'll surely return that map value in future.
     }
   }
 
@@ -82,25 +70,23 @@ class _tabsScreenState extends ConsumerState<TabsScreen> {
   Widget build(BuildContext context) {
     final meals = ref.watch(mealsProvider);
     final activeFilters = ref.watch(filtersProvider);
-    final avaibleMeals = meals.where((Meal) { 
+    final avaibleMeals = meals.where((Meal) {
       // filtering the dummyMeals list according to the filters we have.
-      if (activeFilters[Filter.glutenFree]! && !Meal.isGlutenFree){
+      if (activeFilters[Filter.glutenFree]! && !Meal.isGlutenFree) {
         return false;
       }
-      if (activeFilters[Filter.lactoseFree]! && !Meal.isLactoseFree){
+      if (activeFilters[Filter.lactoseFree]! && !Meal.isLactoseFree) {
         return false;
       }
-      if (activeFilters[Filter.vegan]! && !Meal.isVegan){
+      if (activeFilters[Filter.vegan]! && !Meal.isVegan) {
         return false;
       }
-      if (activeFilters[Filter.vegetarian]! && !Meal.isVegetarian){
+      if (activeFilters[Filter.vegetarian]! && !Meal.isVegetarian) {
         return false;
       }
 
       return true; // for remaining list items which aren't filtered.
-
     }).toList();
-
 
     Widget activePage = CategoriesScreen(
       availbleMeals: avaibleMeals,
@@ -112,7 +98,6 @@ class _tabsScreenState extends ConsumerState<TabsScreen> {
       activePage = MealsScreen(
         meals: favMeal,
         title: '',
-        
       );
       activePageTitle = 'Your Favourites';
     }
@@ -121,11 +106,11 @@ class _tabsScreenState extends ConsumerState<TabsScreen> {
         title: Text(activePageTitle),
       ),
       drawer: MainDrawer(
-       onSelectScreen: _setScreen,
+        onSelectScreen: _setScreen,
       ),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
-        key: Key('bottom_navigation_bar'),
+        key: const Key('bottom_navigation_bar'),
         onTap: (index) {
           setState(() {
             _selectedPageIndex = index;
@@ -133,10 +118,39 @@ class _tabsScreenState extends ConsumerState<TabsScreen> {
         }, // flutter gives an index value according to the pressed tab.
         currentIndex:
             _selectedPageIndex, // it'll control highlighting of current tab.
-        items: const [
+        items: [
           BottomNavigationBarItem(
-              icon: Icon(Icons.set_meal), label: 'Categories'),
-          BottomNavigationBarItem(icon: Icon(Icons.star), label: "Favourites"),
+              icon: AnimatedSwitcher(
+                // implicit animation.
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (child, animation) => FadeTransition(
+                  opacity: Tween<double>(begin: 0.5, end: 1).animate(
+                      animation), // Tween is used to define the range of values.
+                  child: child,
+                ),
+                child: const Icon(
+                  Icons.set_meal,
+                  key: ValueKey("fish"),
+                ),
+              ),
+              label: 'Categories'),
+          BottomNavigationBarItem(
+              icon: AnimatedSwitcher(
+                // implicit animation.
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (child, animation) {
+                  return RotationTransition(
+                    turns: Tween<double>(begin: 0.5, end: 1).
+                    animate(animation), // Tween is used to define the range of values.
+                    child: child,
+                  );
+                },
+                child: const Icon(
+                  Icons.star,
+                  key: ValueKey("star"),
+                ),
+              ),
+              label: "Favourites"),
         ],
       ),
     );

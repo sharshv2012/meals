@@ -88,7 +88,7 @@ class _CategoriesScreenState extends State<CategoriesScreen>
           //...availableCategories.map((category) => CategoryGridItem(category:category)).toList()
         ],
       ),
-      builder: (context, child) => SlideTransition(
+      builder: (context, child) => SlideTransition( // there are many types of transitions available.
         //optimized version
         position: Tween(
           begin: const Offset(0, 0.3), // 30% offset on y axis.
