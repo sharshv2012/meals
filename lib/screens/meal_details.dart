@@ -48,11 +48,15 @@ class MealDetailsScreen extends ConsumerWidget {
         child: Column(
           // for making it Scrollable I can also use ListView instead of column but then the items won't be centered by default.
           children: [
-            Image.network(
-              meal.imageUrl,
-              height: 300,
-              width: double.infinity,
-              fit: BoxFit.cover,
+            Hero( // animating this image from meal_item i.e. meals screen.
+              tag: meal.id,
+              
+              child: Image.network(
+                meal.imageUrl,
+                height: 300,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
             const SizedBox(
               height: 14,
